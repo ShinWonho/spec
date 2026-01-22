@@ -1038,7 +1038,7 @@ Each {{Table}} object has a \[[Table]] internal slot, which is a [=table address
 
 <div algorithm>
     The <dfn constructor for="Table">Table(|descriptor|, |value|)</dfn> constructor, when invoked, performs the following steps:
-    1. Let |elementtype| be [=ToValueType=](|descriptor|["element"]).
+    1. Let |elementtype| be [=?=] [=ToValueType=](|descriptor|["element"]).
     1. If |elementtype| is not a [=reftype=],
         1. [=Throw=] a {{TypeError}} exception.
     1. If |descriptor|["address"] [=map/exists=], let |addrtype| be |descriptor|["address"]; otherwise, let |addrtype| be "i32".
@@ -1173,7 +1173,8 @@ which can be simultaneously referenced by multiple {{Instance}} objects. Each
 </div>
 
 <div algorithm>
-    The algorithm <dfn>ToValueType</dfn>(|s|) performs the following steps:
+    The algorithm <dfn>ToValueType</dfn>(|v|) performs the following steps:
+    1. Let |s| be [=?=] [$ToString$](|v|).
     1. If |s| equals "i32", return [=i32=].
     1. If |s| equals "i64", return [=i64=].
     1. If |s| equals "f32", return [=f32=].
@@ -1181,7 +1182,7 @@ which can be simultaneously referenced by multiple {{Instance}} objects. Each
     1. If |s| equals "v128", return [=v128=].
     1. If |s| equals "anyfunc", return [=funcref=].
     1. If |s| equals "externref", return [=externref=].
-    1. Assert: This step is not reached.
+    1. Throw a {{TypeError}} exception.
 </div>
 
 <div algorithm>
@@ -1193,7 +1194,7 @@ which can be simultaneously referenced by multiple {{Instance}} objects. Each
 <div algorithm>
     The <dfn constructor for="Global">Global(|descriptor|, |v|)</dfn> constructor, when invoked, performs the following steps:
     1. Let |mutable| be |descriptor|["mutable"].
-    1. Let |valuetype| be [=ToValueType=](|descriptor|["value"]).
+    1. Let |valuetype| be [=?=] [=ToValueType=](|descriptor|["value"]).
     1. If |valuetype| [=matches/valtype|matches=] [=v128=] or [=exnref=],
         1. Throw a {{TypeError}} exception.
     1. If |v| is missing,
@@ -1559,7 +1560,7 @@ The <dfn constructor for="Tag" lt="Tag(type)">new Tag(|type|)</dfn> constructor 
 1. Let |parameters| be |type|["parameters"].
 1. Let |wasmParameters| be «».
 1. [=list/iterate|For each=] |type| of |parameters|,
-    1. [=list/Append=] [=ToValueType=](|type|) to |wasmParameters|.
+    1. [=list/Append=] [=?=] [=ToValueType=](|type|) to |wasmParameters|.
 1. Let |store| be the current agent's [=associated store=].
 1. Let (|store|, |tagAddress|) be [=tag_alloc=](|store|, |wasmParameters|).
 1. Set the current agent's [=associated store=] to |store|.
